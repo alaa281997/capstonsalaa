@@ -5,6 +5,14 @@ from flask_cors import CORS
 from models import  setup_db, Actor, Movie
 from auth import AuthError, requires_auth, requires_signed_in
 
+AUTH0_DOMAIN = "fsndalaa.us.auth0.com",
+ALGORITHMS = ["RS256"],
+API_AUDIENCE = "Casting",
+AUTH0_CLIENT_ID ="ssYGvaNW6lXmsQWbUsYYzj2SsPtXGczl",
+AUTH0_CALLBACK_URL="http://localhost:8080"
+
+
+
 def create_app(test_config=None):
 
     app = Flask(__name__)
@@ -66,7 +74,7 @@ def create_app(test_config=None):
         age = data.get('age',None)
         gender = data.get('gender',None)
  
-        actor = Actor.query.get(id)
+        actor = Actor.query.get(actor_id)
     
         if actor is None:
            abort (404)
@@ -90,7 +98,7 @@ def create_app(test_config=None):
     @requires_auth('delete:actors')
     def delete_actor(payload):
      ''' Delete an actor'''
-     actor = Actor.query.get(id)
+     actor = Actor.query.get(actor_id)
 
      if actor is None:
          abort (404)
@@ -105,12 +113,12 @@ def create_app(test_config=None):
          abort(500)
 
    
-    @app.route('/movies', methods = ['GET'])
+    @app.route('/movies/<movie_id>', methods = ['GET'])
     @requires_auth('get:movies')
     def get_movie(payload):
         ''' get movie '''
         
-        movie = Movie.query.get(id)
+        movie = Movie.query.get(movie_id)
    
         if movie is None:
            abort (404)
@@ -150,7 +158,7 @@ def create_app(test_config=None):
         title = data.get('title',None)
         release_date = data.get('release_date',None)
 
-        movie = Movie.query.get(id)
+        movie = Movie.query.get(movie_id)
 
         if movie is None:
             abort(404)
@@ -168,11 +176,11 @@ def create_app(test_config=None):
             }),200
         except Exception:
             abort (500)
-    @app.route('/movies/<int:id>', methods = ['DELETE'])
+    @app.route('/movies/<movie_id>', methods = ['DELETE'])
     @requires_auth('delete:movies')
     def delete_movie(payload):
         ''' delete a movie'''
-        movie = Movie.query.get(id)
+        movie = Movie.query.get(movie_id)
 
         if movie is None:
             abort(400)
