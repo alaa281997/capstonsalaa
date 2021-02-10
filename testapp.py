@@ -13,20 +13,16 @@ casting_director = ("Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Imw5Ni1F
 
 class CastingTest(unittest.TestCase):
     '''Setup test suite for the routes'''
-    def setup(self):
+    def setUp(self):
         '''setup application'''
         self.app = create_app()
         self.client = self.app.test_client
         self.database_name = "castingagency"
         self.database_path = "postgres://{}/{}".format('localhost:5432', self.database_name)
 
-        selfup_db(self.app, self.database_path) 
-        self.headers = {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer",
-            'Token': token}
-
+        setup_db(self.app, self.database_path) 
         
+       
         self.test_movie = {
             'title':'wonder',
             'release_data':'2021-01-01'
