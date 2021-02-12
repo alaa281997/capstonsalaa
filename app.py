@@ -61,7 +61,7 @@ def create_app(test_config=None):
              return jsonify({
                  'success':True,
                  'actor':actor.format()
-             }), 201
+                }), 201
          except Exception:
             abort (500)
 
@@ -113,7 +113,7 @@ def create_app(test_config=None):
          abort(500)
 
    
-    @app.route('/movies/<movie_id>', methods = ['GET'])
+    @app.route('/movies', methods = ['GET'])
     @requires_auth('get:movies')
     def get_movie(payload):
         ''' get movie '''
